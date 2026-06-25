@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OneGlance — AZ-900 Azure Fundamentals</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue: #378ADD; --blue-dark: #185FA5; --blue-light: #E6F1FB; --blue-text: #042C53;
+    --purple: #7F77DD; --purple-dark: #534AB7; --purple-light: #EEEDFE; --purple-text: #26215C;
+    --teal: #1D9E75; --teal-light: #E1F5EE; --teal-text: #04342C;
+    --amber-light: #FAEEDA; --amber-text: #412402;
+    --coral-light: #FAECE7; --coral-text: #4A1B0C;
+    --pink-light: #FBEAF0; --pink-text: #4B1528;
+    --green-light: #EAF3DE; --green-text: #173404;
+    --bg: #f8f8f6; --surface: #ffffff; --surface2: #f3f3f0;
+    --text: #1a1a18; --text2: #5a5a56; --text3: #9a9a96;
+    --border: #e4e4e0; --border2: #d0d0cc; --radius: 8px;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+  /* NAV */
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 0.875rem 2rem; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+  .logo { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 600; color: var(--text); text-decoration: none; }
+  .logo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--blue); }
+  .nav-badge { background: var(--blue-light); color: var(--blue-text); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a { font-size: 14px; color: var(--text2); text-decoration: none; }
+  .nav-links a:hover { color: var(--text); }
+  .btn-primary { background: var(--blue); color: #fff; border: none; padding: 8px 18px; border-radius: var(--radius); font-size: 13px; cursor: pointer; font-weight: 500; }
+  .btn-primary:hover { background: var(--blue-dark); }
+
+  /* HERO */
+  .hero { padding: 3rem 2rem 2.5rem; background: var(--surface); border-bottom: 1px solid var(--border); }
+  .hero-inner { max-width: 680px; }
+  .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: var(--blue-dark); text-transform: uppercase; margin-bottom: 0.75rem; }
+  .hero h1 { font-size: 40px; font-weight: 700; line-height: 1.15; color: var(--text); margin-bottom: 0.75rem; }
+  .hero h1 span { color: var(--blue); }
+  .hero p { font-size: 16px; color: var(--text2); max-width: 500px; margin-bottom: 1.5rem; }
+  .hero-meta { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .meta-pill { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text2); }
+  .meta-pill svg { width: 16px; height: 16px; stroke: var(--blue); fill: none; stroke-width: 2; stroke-linecap: round; }
+
+  /* PROGRESS */
+  .progress-bar { padding: 1rem 2rem; background: var(--surface2); border-bottom: 1px solid var(--border); }
+  .progress-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--text3); margin-bottom: 6px; }
+  .progress-track { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 99px; background: var(--blue); transition: width 0.4s ease; width: 0%; }
+
+  /* MAIN */
+  .main { max-width: 900px; margin: 0 auto; padding: 2rem; }
+  .section-header { margin-bottom: 1.25rem; }
+  .section-title { font-size: 20px; font-weight: 600; color: var(--text); }
+  .section-sub { font-size: 14px; color: var(--text2); margin-top: 4px; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .tab { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--text2); transition: all 0.15s; }
+  .tab.active { background: var(--blue-light); color: var(--blue-text); border-color: #B5D4F4; }
+  .tab:hover:not(.active) { border-color: var(--border2); color: var(--text); }
+
+  /* CARDS */
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; cursor: pointer; transition: border-color 0.15s, transform 0.1s; }
+  .card:hover { border-color: var(--border2); transform: translateY(-1px); }
+  .card.done { border-color: #9FE1CB; background: #fafffe; }
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+  .card-left { display: flex; align-items: flex-start; gap: 10px; flex: 1; }
+  .card-icon { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .card-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .card-sub { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .card-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
+  .card.done .card-check { background: var(--teal); border-color: var(--teal); }
+  .card-check svg { width: 12px; height: 12px; stroke: #fff; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; display: none; }
+  .card.done .card-check svg { display: block; }
+  .card-footer { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .tag { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+  .weight-tag { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: var(--surface2); color: var(--text3); border: 1px solid var(--border); }
+
+  /* EXAM INFO */
+  .exam-bar { display: flex; gap: 12px; flex-wrap: wrap; padding: 1.25rem 2rem; background: var(--blue-light); border-bottom: 1px solid #B5D4F4; }
+  .exam-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--blue-text); font-weight: 500; }
+  .exam-item svg { width: 15px; height: 15px; stroke: var(--blue-dark); fill: none; stroke-width: 2; stroke-linecap: round; }
+
+  /* CTA */
+  .cta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border2); padding: 10px 20px; border-radius: var(--radius); font-size: 14px; cursor: pointer; font-weight: 500; }
+  .btn-outline:hover { background: var(--surface2); }
+
+  /* FOOTER */
+  footer { padding: 1.5rem 2rem; border-top: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-top: 3rem; }
+  .footer-logo { display: flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 600; color: var(--text); }
+  .footer-copy { font-size: 12px; color: var(--text3); }
+
+  /* DEEP DIVE MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: center; justify-content: center; padding: 1.5rem; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--surface); border-radius: 16px; max-width: 560px; width: 100%; max-height: 80vh; overflow-y: auto; padding: 1.75rem; border: 1px solid var(--border); }
+  .modal-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.25rem; }
+  .modal-title { font-size: 20px; font-weight: 700; color: var(--text); }
+  .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text2); line-height: 1; padding: 0 4px; }
+  .modal-section { margin-bottom: 1.25rem; }
+  .modal-section h3 { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text3); margin-bottom: 8px; }
+  .modal-section p { font-size: 14px; color: var(--text2); line-height: 1.7; }
+  .key-points { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .key-points li { display: flex; gap: 8px; font-size: 14px; color: var(--text2); }
+  .key-points li::before { content: "→"; color: var(--blue); font-weight: 600; flex-shrink: 0; }
+  .analogy-box { background: var(--blue-light); border-radius: var(--radius); padding: 1rem; font-size: 14px; color: var(--blue-text); line-height: 1.6; }
+  .analogy-box strong { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; color: var(--blue-dark); }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 28px; }
+    .main { padding: 1.25rem; }
+    .nav-links { display: none; }
+    .exam-bar { padding: 1rem 1.25rem; }
+    .hero { padding: 2rem 1.25rem; }
+    .progress-bar { padding: 0.875rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="#"><span class="logo-dot"></span> OneGlance <span class="nav-badge">AZ-900</span></a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="#topics">Topics</a>
+      <a href="#" onclick="openQuiz()">Quiz me</a>
+    </div>
+    <button class="btn-primary" onclick="openQuiz()">Take a quiz</button>
+  </div>
+</nav>
+
+<div class="exam-bar">
+  <div class="exam-item">
+    <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg>
+    60 questions
+  </div>
+  <div class="exam-item">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+    60 minutes
+  </div>
+  <div class="exam-item">
+    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    700/1000 to pass
+  </div>
+  <div class="exam-item">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+    6 domains
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Microsoft Azure Fundamentals</div>
+    <h1>AZ-900 at a <span>glance</span></h1>
+    <p>Every domain, every concept — laid out so you can scan, understand, and remember it fast. Click any card to dive deeper. Tick it when you're confident.</p>
+    <div class="hero-meta">
+      <div class="meta-pill">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        18 core topics
+      </div>
+      <div class="meta-pill">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+        ~5 min per topic
+      </div>
+      <div class="meta-pill">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        Track your progress
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="progress-bar">
+  <div class="progress-labels">
+    <span id="prog-label">0 of 18 topics done</span>
+    <span id="prog-pct">0%</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+</div>
+
+<div class="main" id="topics">
+  <div class="section-header">
+    <div class="section-title">Study by domain</div>
+    <div class="section-sub">Click a card to read the full glance. Tick it when you know it.</div>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-domain="all">All domains</div>
+    <div class="tab" data-domain="cloud">Cloud concepts</div>
+    <div class="tab" data-domain="arch">Architecture</div>
+    <div class="tab" data-domain="compute">Compute</div>
+    <div class="tab" data-domain="network">Networking</div>
+    <div class="tab" data-domain="storage">Storage</div>
+    <div class="tab" data-domain="security">Security &amp; mgmt</div>
+  </div>
+
+  <div class="cards" id="card-grid"></div>
+
+  <div class="cta-row">
+    <button class="btn-primary" onclick="openQuiz()">Quiz me on AZ-900</button>
+    <button class="btn-outline" onclick="resetProgress()">Reset progress</button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo"><span class="logo-dot"></span> OneGlance</div>
+  <div class="footer-copy">AZ-900 — your first Azure certification. Built with OneGlance.</div>
+</footer>
+
+<!-- DEEP DIVE MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal" id="modal-content">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title"></div>
+      <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">×</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+const topics = [
+  {
+    id:1, domain:"cloud", icon:"☁️", bg:"#E6F1FB", tag:"Core concept", tagColor:"#E6F1FB", tagText:"#042C53", weight:"20–25%",
+    title:"Cloud computing",
+    sub:"On-demand resources over the internet — IaaS, PaaS, SaaS explained.",
+    what:"Cloud computing is the delivery of computing services — servers, storage, databases, networking, software — over the internet ('the cloud'). You pay only for what you use.",
+    points:["IaaS: You manage OS and apps, Azure manages hardware (e.g. Virtual Machines)","PaaS: You manage apps only, Azure manages OS + hardware (e.g. App Service)","SaaS: Azure manages everything, you just use the software (e.g. Microsoft 365)"],
+    analogy:"Think of it like electricity. You don't build your own power plant — you just plug in and pay for what you use."
+  },
+  {
+    id:2, domain:"cloud", icon:"⚖️", bg:"#E6F1FB", tag:"Core concept", tagColor:"#E6F1FB", tagText:"#042C53", weight:"20–25%",
+    title:"CapEx vs OpEx",
+    sub:"Capital vs operational spending — why cloud shifts to OpEx model.",
+    what:"CapEx (Capital Expenditure) = buying physical infrastructure upfront, like servers. OpEx (Operational Expenditure) = paying for services as you use them, like Azure subscriptions.",
+    points:["Traditional IT = CapEx: buy servers, pay upfront, depreciate over time","Cloud = OpEx: pay monthly, scale up or down, no big upfront cost","Azure turns IT from a capital investment into a predictable operating expense"],
+    analogy:"CapEx is buying a car. OpEx is using Uber — pay per ride, no maintenance, no upfront cost."
+  },
+  {
+    id:3, domain:"cloud", icon:"🔄", bg:"#E6F1FB", tag:"Core concept", tagColor:"#E6F1FB", tagText:"#042C53", weight:"20–25%",
+    title:"Cloud models",
+    sub:"Public, Private, Hybrid — when to use each.",
+    what:"The three cloud deployment models define where your infrastructure lives and who manages it.",
+    points:["Public cloud: Hosted by Azure, shared infrastructure, most cost-effective","Private cloud: Your own datacenter, full control, higher cost (e.g. on-premise)","Hybrid cloud: Mix of public + private — sensitive data stays on-prem, rest on Azure"],
+    analogy:"Public = apartment building. Private = your own house. Hybrid = own a house but rent extra rooms when needed."
+  },
+  {
+    id:4, domain:"cloud", icon:"📐", bg:"#E6F1FB", tag:"Core concept", tagColor:"#E6F1FB", tagText:"#042C53", weight:"20–25%",
+    title:"Shared responsibility",
+    sub:"Who owns security — you vs Microsoft, by service type.",
+    what:"In cloud, security responsibilities are split between Microsoft and you. The model shifts depending on which service type you use.",
+    points:["IaaS: Microsoft secures hardware/network. You secure OS, apps, data.","PaaS: Microsoft also handles OS. You secure apps and data.","SaaS: Microsoft handles almost everything. You manage users and data access."],
+    analogy:"Like renting an office. The building owner secures the structure; you lock your own office door."
+  },
+  {
+    id:5, domain:"arch", icon:"🌍", bg:"#EEEDFE", tag:"Architecture", tagColor:"#EEEDFE", tagText:"#26215C", weight:"15–20%",
+    title:"Regions & geographies",
+    sub:"Azure's 60+ regions worldwide and data residency rules.",
+    what:"Azure operates in 60+ regions globally. A region is a set of datacenters in a geographic location. Geographies ensure data residency and compliance requirements are met.",
+    points:["Each region has at least one datacenter — often multiple for redundancy","Choose a region close to your users to reduce latency","Some data must stay in specific countries (e.g. GDPR in Europe) — regions help comply"],
+    analogy:"Think of regions like post offices in different cities. Data lives in the closest one to your users."
+  },
+  {
+    id:6, domain:"arch", icon:"🏢", bg:"#EEEDFE", tag:"Architecture", tagColor:"#EEEDFE", tagText:"#26215C", weight:"15–20%",
+    title:"Availability zones",
+    sub:"Physically separate datacenters in one region for high availability.",
+    what:"Availability Zones are physically separate datacenters within an Azure region. Each has its own power, cooling, and networking. Used to protect apps from datacenter failures.",
+    points:["Minimum 3 zones per region that supports them","If one zone goes down, others keep running — no downtime","Use zones for mission-critical apps that can't afford outages"],
+    analogy:"Like having 3 generators in 3 different buildings. If one fails, the others keep the lights on."
+  },
+  {
+    id:7, domain:"arch", icon:"📦", bg:"#EEEDFE", tag:"Architecture", tagColor:"#EEEDFE", tagText:"#26215C", weight:"15–20%",
+    title:"Resource groups",
+    sub:"Logical containers that group related Azure resources.",
+    what:"A Resource Group is a container that holds related Azure resources for an application. Every resource must belong to exactly one resource group.",
+    points:["Group resources by project, environment (dev/prod), or lifecycle","Deleting a resource group deletes all resources inside it","Apply permissions and policies at the group level — easier management"],
+    analogy:"Like a project folder on your computer. Everything for that project goes in one folder — easy to find, move, or delete."
+  },
+  {
+    id:8, domain:"arch", icon:"🔑", bg:"#EEEDFE", tag:"Architecture", tagColor:"#EEEDFE", tagText:"#26215C", weight:"15–20%",
+    title:"Subscriptions & tenants",
+    sub:"Billing boundary (subscription) vs identity boundary (tenant).",
+    what:"A Subscription is a billing unit — all resources inside it are billed together. A Tenant is an Azure AD instance representing your organization's identity.",
+    points:["One organization can have multiple subscriptions (e.g. dev, test, prod)","Tenant = your company's identity in Azure AD — users and groups live here","Management Groups sit above subscriptions — govern multiple subscriptions at once"],
+    analogy:"Tenant = your company. Subscription = your company credit card. Resource Group = what you bought with that card."
+  },
+  {
+    id:9, domain:"compute", icon:"🖥️", bg:"#FAECE7", tag:"Compute", tagColor:"#FAECE7", tagText:"#4A1B0C", weight:"15–20%",
+    title:"Virtual Machines",
+    sub:"Full IaaS VMs — you manage OS, patches, and runtime.",
+    what:"Azure Virtual Machines (VMs) are IaaS offerings that give you a full virtualized computer in the cloud. You choose the OS, size, and software.",
+    points:["Full control — you install anything, configure anything","You're responsible for OS updates, security patches, and maintenance","VM Scale Sets: automatically add/remove VMs based on demand"],
+    analogy:"Like renting a fully empty apartment. You bring your own furniture and are responsible for upkeep."
+  },
+  {
+    id:10, domain:"compute", icon:"📦", bg:"#FAECE7", tag:"Compute", tagColor:"#FAECE7", tagText:"#4A1B0C", weight:"15–20%",
+    title:"Containers & AKS",
+    sub:"Docker containers on Azure; AKS for orchestration.",
+    what:"Containers package an app and its dependencies into a portable unit. Azure Kubernetes Service (AKS) manages and orchestrates large numbers of containers.",
+    points:["Containers are lighter than VMs — they share the host OS","Azure Container Instances (ACI): run a single container quickly, no cluster needed","AKS: manages clusters of containers, auto-scaling, health monitoring"],
+    analogy:"VMs are houses. Containers are shipping containers — standard size, stack anywhere, move easily."
+  },
+  {
+    id:11, domain:"compute", icon:"⚡", bg:"#FAECE7", tag:"Compute", tagColor:"#FAECE7", tagText:"#4A1B0C", weight:"15–20%",
+    title:"Azure Functions",
+    sub:"Serverless — run code on events, pay per execution.",
+    what:"Azure Functions is a serverless compute service. You write small pieces of code that run in response to triggers (events). No server management needed.",
+    points:["Pay only when your code runs — billed per execution, not per hour","Triggered by HTTP requests, timers, database changes, queues, and more","Ideal for small, event-driven tasks — not for long-running processes"],
+    analogy:"Like a vending machine. Nothing runs until you press a button. You only pay when something is dispensed."
+  },
+  {
+    id:12, domain:"compute", icon:"🌐", bg:"#FAECE7", tag:"Compute", tagColor:"#FAECE7", tagText:"#4A1B0C", weight:"15–20%",
+    title:"App Service",
+    sub:"PaaS for web apps — no server management needed.",
+    what:"Azure App Service is a fully managed PaaS platform for hosting web apps, REST APIs, and mobile backends. You deploy your code; Azure handles the rest.",
+    points:["Supports multiple languages: .NET, Java, Python, Node.js, PHP, Ruby","Built-in auto-scaling, load balancing, and SSL certificates","No OS or runtime management — just push your code and it runs"],
+    analogy:"Like a serviced apartment. You just move in with your clothes — no maintenance, no plumbing, all included."
+  },
+  {
+    id:13, domain:"network", icon:"🔗", bg:"#E1F5EE", tag:"Networking", tagColor:"#E1F5EE", tagText:"#04342C", weight:"10–15%",
+    title:"Virtual Network (VNet)",
+    sub:"Your private network in Azure — subnets, peering, DNS.",
+    what:"An Azure Virtual Network (VNet) is your private, isolated network in Azure. Resources inside a VNet can communicate securely with each other.",
+    points:["Divide a VNet into subnets to organize resources and control traffic","VNet Peering: connect two VNets so they communicate privately","VPN Gateway: connect your on-premises network to Azure VNet securely"],
+    analogy:"Like your home Wi-Fi network. Devices inside can talk to each other; outsiders can't get in unless you allow them."
+  },
+  {
+    id:14, domain:"network", icon:"🛡️", bg:"#E1F5EE", tag:"Networking", tagColor:"#E1F5EE", tagText:"#04342C", weight:"10–15%",
+    title:"Azure Firewall & NSG",
+    sub:"Network Security Groups for subnet rules; Firewall for managed protection.",
+    what:"Network Security Groups (NSGs) are basic traffic filters — allow or deny traffic to/from resources. Azure Firewall is a managed, cloud-native firewall with advanced features.",
+    points:["NSG: rule-based, applied to subnet or network interface — free","Azure Firewall: fully managed, enterprise-grade, paid service","DDoS Protection: defends against distributed denial-of-service attacks"],
+    analogy:"NSG = a basic lock on your door. Azure Firewall = a professional security guard at the entrance."
+  },
+  {
+    id:15, domain:"storage", icon:"💾", bg:"#FAEEDA", tag:"Storage", tagColor:"#FAEEDA", tagText:"#412402", weight:"10–15%",
+    title:"Storage account types",
+    sub:"Blob, File, Queue, Table — know which to use when.",
+    what:"An Azure Storage Account provides access to Azure Storage services. There are four main storage types, each for a different use case.",
+    points:["Blob Storage: unstructured data — images, videos, backups, logs","File Storage: managed file shares accessible via SMB protocol","Queue Storage: message queuing between app components","Table Storage: NoSQL key-value store for structured, non-relational data"],
+    analogy:"Blob = a filing cabinet. File = a shared drive. Queue = a to-do list. Table = a spreadsheet."
+  },
+  {
+    id:16, domain:"storage", icon:"♻️", bg:"#FAEEDA", tag:"Storage", tagColor:"#FAEEDA", tagText:"#412402", weight:"10–15%",
+    title:"Storage tiers",
+    sub:"Hot, Cool, Archive — tiered by access frequency and cost.",
+    what:"Azure Blob Storage offers three access tiers to balance storage cost vs access speed.",
+    points:["Hot: frequently accessed data — highest storage cost, lowest access cost","Cool: infrequently accessed (30+ days) — lower storage cost, higher access cost","Archive: rarely accessed (180+ days) — cheapest storage, must 'rehydrate' to read"],
+    analogy:"Hot = items on your desk. Cool = items in a drawer. Archive = items in a storage unit across town."
+  },
+  {
+    id:17, domain:"security", icon:"🔐", bg:"#FBEAF0", tag:"Security", tagColor:"#FBEAF0", tagText:"#4B1528", weight:"25–30%",
+    title:"Azure Active Directory",
+    sub:"Identity-as-a-service — users, groups, MFA, SSO.",
+    what:"Azure Active Directory (Azure AD) is Microsoft's cloud-based identity and access management service. It controls who can sign in and what they can access.",
+    points:["Single Sign-On (SSO): one login for all connected apps","Multi-Factor Authentication (MFA): adds a second verification step beyond password","Conditional Access: grant access based on conditions like location, device, or risk level"],
+    analogy:"Azure AD is like a company receptionist. They verify who you are before letting you into any room."
+  },
+  {
+    id:18, domain:"security", icon:"📊", bg:"#FBEAF0", tag:"Management", tagColor:"#FBEAF0", tagText:"#4B1528", weight:"25–30%",
+    title:"Azure Cost Management",
+    sub:"Budgets, alerts, pricing calculator, TCO tool.",
+    what:"Azure Cost Management + Billing helps you monitor, allocate, and optimize your Azure spending. Key tools help you estimate and control costs.",
+    points:["Pricing Calculator: estimate costs before you deploy anything","Total Cost of Ownership (TCO) Calculator: compare on-prem vs Azure costs","Budgets & Alerts: set a spending limit and get notified before you exceed it"],
+    analogy:"Like a bank app for your Azure spending — see where money goes, set limits, and get alerts before you overspend."
+  }
+];
+
+const done = new Set(JSON.parse(localStorage.getItem('og-done') || '[]'));
+
+function saveDone() { localStorage.setItem('og-done', JSON.stringify([...done])); }
+
+function render(filter) {
+  const grid = document.getElementById('card-grid');
+  const filtered = filter === 'all' ? topics : topics.filter(t => t.domain === filter);
+  grid.innerHTML = filtered.map(t => `
+    <div class="card${done.has(t.id) ? ' done' : ''}" id="card-${t.id}">
+      <div class="card-top">
+        <div class="card-left" onclick="openModal(${t.id})">
+          <div class="card-icon" style="background:${t.bg}">${t.icon}</div>
+          <div>
+            <div class="card-title">${t.title}</div>
+            <div class="card-sub">${t.sub}</div>
+          </div>
+        </div>
+        <div class="card-check" onclick="toggleDone(${t.id})" title="Mark as done">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="tag" style="background:${t.tagColor};color:${t.tagText}">${t.tag}</span>
+        <span class="weight-tag">Exam: ${t.weight}</span>
+      </div>
+    </div>
+  `).join('');
+  updateProgress();
+}
+
+function toggleDone(id) {
+  if (done.has(id)) { done.delete(id); } else { done.add(id); }
+  saveDone();
+  const activeTab = document.querySelector('.tab.active').dataset.domain;
+  render(activeTab);
+}
+
+function updateProgress() {
+  const pct = Math.round((done.size / topics.length) * 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = `${done.size} of ${topics.length} topics done`;
+  document.getElementById('prog-pct').textContent = pct + '%';
+}
+
+function openModal(id) {
+  const t = topics.find(x => x.id === id);
+  document.getElementById('modal-title').textContent = t.icon + '  ' + t.title;
+  document.getElementById('modal-body').innerHTML = `
+    <div class="modal-section">
+      <h3>What is it?</h3>
+      <p>${t.what}</p>
+    </div>
+    <div class="modal-section">
+      <h3>Key points</h3>
+      <ul class="key-points">${t.points.map(p => `<li>${p}</li>`).join('')}</ul>
+    </div>
+    <div class="modal-section">
+      <div class="analogy-box"><strong>Simple analogy</strong>${t.analogy}</div>
+    </div>
+    <div style="margin-top:1.25rem">
+      <button class="btn-primary" onclick="toggleDone(${id});document.getElementById('modal').classList.remove('open')">
+        ${done.has(id) ? 'Mark as not done' : 'Mark as done ✓'}
+      </button>
+    </div>
+  `;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal')) {
+    document.getElementById('modal').classList.remove('open');
+  }
+}
+
+function openQuiz() {
+  const qs = [
+    { q:"What does IaaS stand for?", opts:["Internet as a Service","Infrastructure as a Service","Integration as a Service","Identity as a Service"], ans:1 },
+    { q:"Which Azure service is serverless?", opts:["Virtual Machines","App Service","Azure Functions","AKS"], ans:2 },
+    { q:"What score do you need to pass AZ-900?", opts:["600","650","700","750"], ans:2 },
+    { q:"What is a Resource Group?", opts:["A VM cluster","A billing unit","A logical container for resources","A type of storage"], ans:2 },
+    { q:"Which storage tier is cheapest for rarely accessed data?", opts:["Hot","Cool","Archive","Standard"], ans:2 },
+    { q:"Azure AD is used for?", opts:["Storing files","Identity and access management","Running containers","Network routing"], ans:1 },
+    { q:"CapEx means?", opts:["Cloud expenditure","Capital expenditure","Container experience","Computing expense"], ans:1 },
+    { q:"Availability Zones protect against?", opts:["Hacking","Datacenter failures","Cost overruns","Slow networks"], ans:1 },
+    { q:"Which is a PaaS compute service?", opts:["Virtual Machines","Azure Functions","App Service","AKS node pools"], ans:2 },
+    { q:"VNet peering allows?", opts:["Public internet access","Private communication between VNets","VM auto-scaling","Storage backup"], ans:1 },
+  ];
+  let current = 0, score = 0;
+  function renderQ() {
+    const q = qs[current];
+    document.getElementById('modal-title').textContent = `Question ${current+1} of ${qs.length}`;
+    document.getElementById('modal-body').innerHTML = `
+      <div style="margin-bottom:1.25rem">
+        <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:1rem">${q.q}</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          ${q.opts.map((o,i) => `<button onclick="answer(${i})" style="text-align:left;padding:10px 14px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);font-size:14px;cursor:pointer;color:var(--text)">${o}</button>`).join('')}
+        </div>
+      </div>
+    `;
+  }
+  window.answer = function(i) {
+    const q = qs[current];
+    const correct = i === q.ans;
+    if (correct) score++;
+    const btns = document.querySelectorAll('#modal-body button');
+    btns.forEach((b, idx) => {
+      b.style.cursor = 'default';
+      b.onclick = null;
+      if (idx === q.ans) b.style.background = '#E1F5EE', b.style.borderColor = '#9FE1CB', b.style.color = '#04342C';
+      else if (idx === i && !correct) b.style.background = '#FCEBEB', b.style.borderColor = '#F09595', b.style.color = '#501313';
+    });
+    setTimeout(() => {
+      current++;
+      if (current < qs.length) renderQ();
+      else {
+        document.getElementById('modal-title').textContent = 'Quiz complete!';
+        document.getElementById('modal-body').innerHTML = `
+          <div style="text-align:center;padding:1rem 0">
+            <div style="font-size:48px;margin-bottom:0.75rem">${score >= 8 ? '🎉' : score >= 5 ? '👍' : '📚'}</div>
+            <div style="font-size:28px;font-weight:700;color:var(--text);margin-bottom:0.5rem">${score} / ${qs.length}</div>
+            <div style="font-size:15px;color:var(--text2);margin-bottom:1.5rem">${score >= 8 ? 'Excellent! You are exam-ready.' : score >= 5 ? 'Good progress — review the cards you missed.' : 'Keep studying — go through the topic cards again.'}</div>
+            <button class="btn-primary" onclick="document.getElementById('modal').classList.remove('open')">Back to topics</button>
+          </div>
+        `;
+      }
+    }, 900);
+  };
+  document.getElementById('modal').classList.add('open');
+  renderQ();
+}
+
+function resetProgress() {
+  if (confirm('Reset all your progress?')) {
+    done.clear(); saveDone();
+    const activeTab = document.querySelector('.tab.active').dataset.domain;
+    render(activeTab);
+  }
+}
+
+document.getElementById('tabs').addEventListener('click', e => {
+  const tab = e.target.closest('.tab');
+  if (!tab) return;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  render(tab.dataset.domain);
+});
+
+render('all');
+</script>
+</body>
+</html>
