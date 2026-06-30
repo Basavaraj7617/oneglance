@@ -590,26 +590,72 @@ function openStreak(){
 }
 
 function openQuiz(){
-  const qs=[
-    {q:"What does IaaS stand for?",opts:["Internet as a Service","Infrastructure as a Service","Integration as a Service","Identity as a Service"],ans:1},
-    {q:"Which Azure service is serverless?",opts:["Virtual Machines","App Service","Azure Functions","AKS"],ans:2},
-    {q:"What score do you need to pass AZ-900?",opts:["600","650","700","750"],ans:2},
-    {q:"What is a Resource Group?",opts:["A VM cluster","A billing unit","A logical container for resources","A type of storage"],ans:2},
-    {q:"Which storage tier is cheapest for rarely accessed data?",opts:["Hot","Cool","Archive","Standard"],ans:2},
-    {q:"Azure AD is used for?",opts:["Storing files","Identity and access management","Running containers","Network routing"],ans:1},
-    {q:"CapEx means?",opts:["Cloud expenditure","Capital expenditure","Container experience","Computing expense"],ans:1},
-    {q:"Availability Zones protect against?",opts:["Hacking","Datacenter failures","Cost overruns","Slow networks"],ans:1},
-    {q:"Which is a PaaS compute service?",opts:["Virtual Machines","Azure Functions","App Service","AKS node pools"],ans:2},
-    {q:"VNet peering allows?",opts:["Public internet access","Private communication between VNets","VM auto-scaling","Storage backup"],ans:1},
-    {q:"What is Azure Advisor?",opts:["A chatbot","Recommendations to improve Azure setup","A firewall service","A storage tool"],ans:1},
-    {q:"Which lock prevents deletion but allows modification?",opts:["Read-Only Lock","Delete Lock","Resource Lock","Access Lock"],ans:1},
+  const allQs=[
+    // Cloud Concepts
+    {q:"What does IaaS stand for?",opts:["Internet as a Service","Infrastructure as a Service","Integration as a Service","Identity as a Service"],ans:1,cat:"Cloud"},
+    {q:"Which cloud model gives the MOST control over infrastructure?",opts:["Public cloud","Hybrid cloud","Private cloud","SaaS"],ans:2,cat:"Cloud"},
+    {q:"Which service model means you only manage your application and data?",opts:["IaaS","PaaS","SaaS","On-premises"],ans:1,cat:"Cloud"},
+    {q:"What is the main benefit of OpEx over CapEx in cloud?",opts:["More hardware control","Pay as you go, no upfront cost","Faster internet","Lower latency"],ans:1,cat:"Cloud"},
+    {q:"Which cloud model combines on-premises with public cloud?",opts:["Private cloud","Community cloud","Hybrid cloud","SaaS"],ans:2,cat:"Cloud"},
+    {q:"In SaaS, who manages the underlying infrastructure?",opts:["The customer","The developer","The cloud provider","The government"],ans:2,cat:"Cloud"},
+    {q:"CapEx stands for?",opts:["Cloud expenditure","Capital expenditure","Container experience","Computing expense"],ans:1,cat:"Cloud"},
+    {q:"Which benefit of cloud computing allows you to increase resources quickly?",opts:["High availability","Geo-distribution","Scalability","Disaster recovery"],ans:2,cat:"Cloud"},
+    {q:"In the shared responsibility model for IaaS, who manages the OS?",opts:["Microsoft","The customer","Both equally","Third-party vendor"],ans:1,cat:"Cloud"},
+    {q:"Which cloud deployment model is hosted entirely by a cloud provider like Azure?",opts:["Private","Hybrid","On-premises","Public"],ans:3,cat:"Cloud"},
+    // Architecture
+    {q:"What score do you need to pass AZ-900?",opts:["600","650","700","750"],ans:2,cat:"Architecture"},
+    {q:"What is a Resource Group in Azure?",opts:["A VM cluster","A billing unit","A logical container for resources","A type of storage"],ans:2,cat:"Architecture"},
+    {q:"Availability Zones protect against?",opts:["Hacking","Datacenter failures","Cost overruns","Slow networks"],ans:1,cat:"Architecture"},
+    {q:"What is an Azure Region?",opts:["A single server","A geographic area with datacenters","A billing boundary","A type of VNet"],ans:1,cat:"Architecture"},
+    {q:"Which boundary is used for billing in Azure?",opts:["Management Group","Tenant","Subscription","Resource Group"],ans:2,cat:"Architecture"},
+    {q:"How many Availability Zones does a supported region have at minimum?",opts:["1","2","3","5"],ans:2,cat:"Architecture"},
+    {q:"What sits above Subscriptions to manage multiple billing accounts?",opts:["Resource Groups","Tenants","Management Groups","Regions"],ans:2,cat:"Architecture"},
+    {q:"What is an Azure Tenant?",opts:["A billing account","Your organization's identity in Azure AD","A resource container","A network boundary"],ans:1,cat:"Architecture"},
+    // Compute
+    {q:"Which Azure service is serverless?",opts:["Virtual Machines","App Service","Azure Functions","AKS"],ans:2,cat:"Compute"},
+    {q:"Which is a PaaS compute service for hosting web apps?",opts:["Virtual Machines","Azure Functions","App Service","AKS node pools"],ans:2,cat:"Compute"},
+    {q:"What does AKS stand for?",opts:["Azure Key Service","Azure Kubernetes Service","Automated Kernel System","Azure Kernel Storage"],ans:1,cat:"Compute"},
+    {q:"Which Azure compute service gives you FULL control over the OS?",opts:["App Service","Azure Functions","Virtual Machines","ACI"],ans:2,cat:"Compute"},
+    {q:"Azure Functions billing is based on?",opts:["Per hour","Per VM size","Per execution","Per month"],ans:2,cat:"Compute"},
+    {q:"What are containers lighter than?",opts:["Functions","Virtual Machines","Databases","Storage accounts"],ans:1,cat:"Compute"},
+    {q:"Which service automatically scales VMs up or down based on demand?",opts:["Azure Functions","VM Scale Sets","App Service","AKS"],ans:1,cat:"Compute"},
+    // Networking
+    {q:"VNet peering allows?",opts:["Public internet access","Private communication between VNets","VM auto-scaling","Storage backup"],ans:1,cat:"Networking"},
+    {q:"What does NSG stand for?",opts:["Network Security Gateway","Network Service Group","Network Security Group","Node Service Guard"],ans:2,cat:"Networking"},
+    {q:"Which service distributes incoming traffic across multiple VMs?",opts:["Azure CDN","Azure Firewall","Azure Load Balancer","VNet peering"],ans:2,cat:"Networking"},
+    {q:"Azure CDN is used for?",opts:["Database replication","Global content delivery for fast load times","Network security","Identity management"],ans:1,cat:"Networking"},
+    {q:"What connects your on-premises network to Azure securely?",opts:["NSG","VNet Peering","VPN Gateway","Azure Firewall"],ans:2,cat:"Networking"},
+    // Storage
+    {q:"Which storage tier is cheapest for rarely accessed data?",opts:["Hot","Cool","Archive","Standard"],ans:2,cat:"Storage"},
+    {q:"Which Azure storage type is best for images, videos and backups?",opts:["Table Storage","Queue Storage","File Storage","Blob Storage"],ans:3,cat:"Storage"},
+    {q:"Queue Storage is used for?",opts:["Storing images","Messaging between apps","NoSQL key-value data","File sharing"],ans:1,cat:"Storage"},
+    {q:"Which storage tier requires 'rehydration' before you can read data?",opts:["Hot","Cool","Archive","Standard"],ans:2,cat:"Storage"},
+    {q:"Cosmos DB is best described as?",opts:["A managed SQL database","A globally distributed NoSQL database","A file storage service","A queue service"],ans:1,cat:"Storage"},
+    // Security & Management
+    {q:"Azure AD is used for?",opts:["Storing files","Identity and access management","Running containers","Network routing"],ans:1,cat:"Security"},
+    {q:"What is Azure Advisor?",opts:["A chatbot","Recommendations to improve your Azure setup","A firewall service","A storage tool"],ans:1,cat:"Security"},
+    {q:"Which lock prevents deletion but allows modification?",opts:["Read-Only Lock","Delete Lock","Resource Lock","Access Lock"],ans:1,cat:"Security"},
+    {q:"What does MFA add to the login process?",opts:["Faster login","A second verification step beyond password","Automatic password reset","Single sign-on"],ans:1,cat:"Security"},
+    {q:"Zero Trust security means?",opts:["Trust all internal users","Never trust, always verify","Trust verified users","Only verify external users"],ans:1,cat:"Security"},
+    {q:"Azure Key Vault is used for?",opts:["Storing VM images","Storing secrets and keys securely","Network traffic management","Cost optimization"],ans:1,cat:"Security"},
+    {q:"What does RBAC stand for?",opts:["Role-Based Access Control","Resource Billing and Cost","Remote Backup and Capture","Route-Based Access Config"],ans:0,cat:"Security"},
+    {q:"Which tool helps you estimate Azure costs BEFORE deploying?",opts:["Cost Management","TCO Calculator","Pricing Calculator","Azure Advisor"],ans:2,cat:"Security"},
+    {q:"What does TCO Calculator compare?",opts:["Cloud vs cloud pricing","On-premises vs Azure cost","Dev vs prod environments","Storage tiers"],ans:1,cat:"Security"},
+    {q:"Azure Policy is used to?",opts:["Monitor CPU usage","Enforce organizational compliance rules","Manage user identities","Track spending"],ans:1,cat:"Security"},
+    {q:"Which service monitors Azure outages and planned maintenance?",opts:["Azure Monitor","Azure Advisor","Azure Service Health","Cost Management"],ans:2,cat:"Security"},
+    {q:"What does ARM stand for in Azure?",opts:["Automated Resource Manager","Azure Resource Manager","Application Runtime Manager","Access and Role Manager"],ans:1,cat:"Security"},
+    {q:"Defense in Depth means?",opts:["One strong firewall","Multiple layers of security protection","Only securing the network","Trusting internal traffic"],ans:1,cat:"Security"},
   ];
+  // Shuffle and pick 15 random questions each time
+  const shuffled=[...allQs].sort(()=>Math.random()-.5);
+  const qs=shuffled.slice(0,15);
   let current=0,score=0;
   function renderQ(){
     const q=qs[current];
     document.getElementById('modal-title').textContent=`Question ${current+1} of ${qs.length}`;
     document.getElementById('modal-body').innerHTML=`
       <div style="width:100%;height:5px;background:var(--surface2);border-radius:99px;margin-bottom:1.375rem;overflow:hidden"><div style="width:${(current/qs.length*100).toFixed(0)}%;height:100%;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:99px"></div></div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin-bottom:8px">${q.cat}</div>
       <div style="font-size:17px;font-weight:700;color:var(--text);margin-bottom:1.375rem;line-height:1.5">${q.q}</div>
       <div style="display:flex;flex-direction:column;gap:8px">
         ${q.opts.map((o,i)=>`<button onclick="answer(${i})" style="text-align:left;padding:13px 16px;border-radius:12px;border:2px solid var(--border);background:var(--surface);font-size:14px;cursor:pointer;color:var(--text);font-family:inherit;font-weight:500;transition:all .15s" onmouseover="this.style.borderColor='#3b82f6';this.style.background='#eff6ff'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--surface)'">${o}</button>`).join('')}
@@ -629,8 +675,8 @@ function openQuiz(){
       if(current<qs.length)renderQ();
       else{
         const pct=Math.round(score/qs.length*100);
-        const emoji=score>=10?'🏆':score>=8?'🎉':score>=6?'👍':'📚';
-        const msg=score>=10?'Outstanding! You are fully exam ready.':score>=8?'Great score! Review the ones you missed.':score>=6?'Good progress — keep studying the cards.':'Keep going — review the topic cards and try again.';
+        const emoji=score>=13?'🏆':score>=10?'🎉':score>=8?'👍':'📚';
+        const msg=score>=13?'Outstanding! You are fully exam ready.':score>=10?'Great score! Review the ones you missed.':score>=8?'Good progress — keep studying the cards.':'Keep going — review the topic cards and try again.';
         document.getElementById('modal-title').textContent='Quiz complete!';
         document.getElementById('modal-body').innerHTML=`
           <div style="text-align:center;padding:1rem 0">
